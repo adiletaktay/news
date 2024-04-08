@@ -1,0 +1,34 @@
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header-title {
+  font-size: 40px;
+}
+
+.news-block-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.news-block {
+  padding-bottom: 20px;
+  width: 30%;
+
+  &__img {
+    width: 100%;
+    height: auto;
+  }
+
+  &__title {
+    font-size: 20px;
+  }
+
+  &__subtitle {
+    font-size: 16px;
+  }
+}
