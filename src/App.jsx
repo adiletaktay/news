@@ -1,6 +1,27 @@
+import React from 'react'
 import './App.scss'
+import { NewsBlock } from './NewsBlock'
 
 function App() {
+  const [newspaper, setNewspaper] = React.useState([]);
+
+  React.useEffect(() => {
+    const uniqueId = () => String(
+      Date.now().toString(32) +
+        Math.random().toString(16)
+    ).replace(/\./g, '');
+    const url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey=c8a67f82461f465aa0a54b7e2ff314e6&pageSize=6';
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.response);
+        const articles = response.articles.map(a => ({...a, id: uniqueId()}));
+        setNewspaper(articles);
+      }
+    };
+    xhr.send();
+  }, []);
 
   return (
     <>
@@ -8,43 +29,11 @@ function App() {
         <header>
           <h1 className="header-title">NEWS</h1>
         </header>
-        <div className='news-block-wrapper'>
-          <div className="news-block">
-            <img  src="https://tengrinews.kz/userdata/news/2024/news_531610/thumb_m/photo_468156.jpeg" className='news-block__img' alt='news'></img>
-            <h2 className='news-block__title'>Lorem ipsum dolor sit</h2>
-            <div className='news-block__subtitle'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem rem atque dicta maiores magnam laborum odio quaerat, possimus molestiae nostrum repudiandae. Illum exercitationem doloremque, asperiores fugiat aliquid autem quaerat incidunt!</div>
-            <div className='nws-block__date'>2024-04-08</div>
-          </div>
-          <div className="news-block">
-            <img  src="https://tengrinews.kz/userdata/news/2024/news_531610/thumb_m/photo_468156.jpeg" className='news-block__img' alt='news'></img>
-            <h2 className='news-block__title'>Lorem ipsum dolor sit</h2>
-            <div className='news-block__subtitle'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem rem atque dicta maiores magnam laborum odio quaerat, possimus molestiae nostrum repudiandae. Illum exercitationem doloremque, asperiores fugiat aliquid autem quaerat incidunt!</div>
-            <div className='nws-block__date'>2024-04-08</div>
-          </div>
-          <div className="news-block">
-            <img  src="https://tengrinews.kz/userdata/news/2024/news_531610/thumb_m/photo_468156.jpeg" className='news-block__img' alt='news'></img>
-            <h2 className='news-block__title'>Lorem ipsum dolor sit</h2>
-            <div className='news-block__subtitle'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem rem atque dicta maiores magnam laborum odio quaerat, possimus molestiae nostrum repudiandae. Illum exercitationem doloremque, asperiores fugiat aliquid autem quaerat incidunt!</div>
-            <div className='nws-block__date'>2024-04-08</div>
-          </div>
-          <div className="news-block">
-            <img  src="https://tengrinews.kz/userdata/news/2024/news_531610/thumb_m/photo_468156.jpeg" className='news-block__img' alt='news'></img>
-            <h2 className='news-block__title'>Lorem ipsum dolor sit</h2>
-            <div className='news-block__subtitle'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem rem atque dicta maiores magnam laborum odio quaerat, possimus molestiae nostrum repudiandae. Illum exercitationem doloremque, asperiores fugiat aliquid autem quaerat incidunt!</div>
-            <div className='nws-block__date'>2024-04-08</div>
-          </div>
-          <div className="news-block">
-            <img  src="https://tengrinews.kz/userdata/news/2024/news_531610/thumb_m/photo_468156.jpeg" className='news-block__img' alt='news'></img>
-            <h2 className='news-block__title'>Lorem ipsum dolor sit</h2>
-            <div className='news-block__subtitle'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem rem atque dicta maiores magnam laborum odio quaerat, possimus molestiae nostrum repudiandae. Illum exercitationem doloremque, asperiores fugiat aliquid autem quaerat incidunt!</div>
-            <div className='nws-block__date'>2024-04-08</div>
-          </div>
-          <div className="news-block">
-            <img  src="https://tengrinews.kz/userdata/news/2024/news_531610/thumb_m/photo_468156.jpeg" className='news-block__img' alt='news'></img>
-            <h2 className='news-block__title'>Lorem ipsum dolor sit</h2>
-            <div className='news-block__subtitle'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem rem atque dicta maiores magnam laborum odio quaerat, possimus molestiae nostrum repudiandae. Illum exercitationem doloremque, asperiores fugiat aliquid autem quaerat incidunt!</div>
-            <div className='nws-block__date'>2024-04-08</div>
-          </div>
+        <div className='content'>
+          {
+            newspaper.map(obj =>
+              <NewsBlock key={obj.id} {...obj} />)
+          }
         </div>
       </div>
     </>
