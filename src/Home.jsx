@@ -8,9 +8,11 @@ export const  Home = () => {
     const [newspaper, setNewspaper] = React.useState([]);
     const [searchValue, setSearchValue] = React.useState('');
     const [currentPage, setCurrentPage] = React.useState(1);
+    const [loading, setLoading] = React.useState(false);
     const pageCount = React.useRef(1);
 
     React.useEffect(() => {
+      setLoading(true);
       const uniqueId = () => String(
         Date.now().toString(32) +
           Math.random().toString(16)
@@ -26,6 +28,7 @@ export const  Home = () => {
           setNewspaper(articles);
           pageCount.current = Math.ceil(response.totalResults / 6);
         }
+        setLoading(false);
       };
       xhr.send();
     }, [searchValue, currentPage]);
@@ -34,16 +37,17 @@ export const  Home = () => {
         <>
             <Search setSearchValue={setSearchValue} setCurrentPage={setCurrentPage} />
             <div className='content'>
-                { newspaper.length ? 
+                { loading ? '' :
+                  newspaper.length ? 
                     newspaper.map(obj =>
                     <NewsBlock key={obj.id} {...obj} />)
                     : <div className='not-found'> 
-                    <h1>
-                        <span>😕</span>
-                        <br />
-                        Nothing found
-                    </h1>
-                </div>
+                        <h1>
+                          <span>😕</span>
+                          <br />
+                          Nothing found
+                        </h1>
+                      </div>
                 }
             </div>
             <Pagination currentPage={currentPage} pageCount={pageCount.current} onChangePage={number => setCurrentPage(number)}/>
