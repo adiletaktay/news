@@ -121,3 +121,36 @@
   top: 15px;
   cursor: pointer;
 }
+
+.pagination {
+  padding: 0;
+
+  li {
+    display: inline-block;
+
+    a {
+      display: inline-block;
+      color: black;
+      text-align: center;
+      width: 45px;
+      line-height: 42px;
+      height: 45px;
+      border: 1px solid black;
+      border-radius: 30px;
+      margin-right: 10px;
+      cursor: pointer;
+
+      &:hover {
+          background-color: black;
+          color: #fff;
+      }
+    }
+  }
+
+  .selected {
+    a {
+        background-color: black;
+        color: #fff;
+    }
+  }
+}
