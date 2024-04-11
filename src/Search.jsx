@@ -1,15 +1,27 @@
-export const Search = ({ searchValue, setSearchValue }) => {
+import React from "react";
+import debounce from "lodash.debounce";
+
+export const Search = ({ setSearchValue, setCurrentPage }) => {
+
+    const [value, setValue] = React.useState('')
+    const inputRef = React.useRef();
 
     const onClickClear = () => {
         setSearchValue('');
+        setValue('');
+        inputRef.current.focus();
     };
     
-    const updateSearchValue = (str) => {
+    const updateSearchValue = React.useCallback(
+        debounce((str) => {
         setSearchValue(str);
-    };
+        setCurrentPage(1);
+    }, 500),
+    []);
 
     const onChangeInput = (event) => {
-        updateSearchValue(event.target.value);
+        setValue(event.target.value);
+        updateSearchValue(event.target.value)
     };
 
   return (
@@ -24,11 +36,12 @@ export const Search = ({ searchValue, setSearchValue }) => {
             </g>
         </svg>
         <input
+            ref={inputRef}
             className="search-input" 
-            value={searchValue}
+            value={value}
             onChange={onChangeInput}
             placeholder='Search ...' />
-        {searchValue && (
+        {value && (
             <svg 
                 onClick={onClickClear}
                 className="close-icon"

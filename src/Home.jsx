@@ -32,13 +32,20 @@ export const  Home = () => {
 
     return (
         <>
-            <Search searchValue={searchValue} setSearchValue={setSearchValue} />
+            <Search setSearchValue={setSearchValue} setCurrentPage={setCurrentPage} />
             <div className='content'>
-                {
-                newspaper.map(obj =>
-                <NewsBlock key={obj.id} {...obj} />)
-            }
-              </div>
+                { newspaper.length ? 
+                    newspaper.map(obj =>
+                    <NewsBlock key={obj.id} {...obj} />)
+                    : <div className='not-found'> 
+                    <h1>
+                        <span>😕</span>
+                        <br />
+                        Nothing found
+                    </h1>
+                </div>
+                }
+            </div>
             <Pagination currentPage={currentPage} pageCount={pageCount.current} onChangePage={number => setCurrentPage(number)}/>
         </>
     )
