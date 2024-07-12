@@ -1,7 +1,7 @@
 import React, { Suspense } from "react"
 import { Routes, Route } from "react-router-dom"
 import { Home } from "./Home"
-import MainLayout from "./MainLayout"
+import { MainLayout } from "./MainLayout"
 
 import "./App.scss"
 

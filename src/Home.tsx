@@ -4,12 +4,22 @@ import { Search } from "./Search"
 import { Pagination } from "./Pagination"
 import defaultImage from "./assets/default-image.jpg"
 
-export const Home = () => {
-  const [newspaper, setNewspaper] = React.useState([])
-  const [searchValue, setSearchValue] = React.useState("")
-  const [currentPage, setCurrentPage] = React.useState(1)
-  const [loading, setLoading] = React.useState(false)
-  const pageCount = React.useRef(1)
+interface Article {
+  url: string
+  urlToImage: string
+  title: string
+  description: string
+  publishedAt: string
+  author: string
+  id: string
+}
+
+export const Home: React.FC = () => {
+  const [newspaper, setNewspaper] = React.useState<Article[]>([])
+  const [searchValue, setSearchValue] = React.useState<string>("")
+  const [currentPage, setCurrentPage] = React.useState<number>(1)
+  const [loading, setLoading] = React.useState<boolean>(false)
+  const pageCount = React.useRef<number>(1)
 
   React.useEffect(() => {
     setLoading(true)
@@ -21,7 +31,7 @@ export const Home = () => {
     xhr.onload = function () {
       if (xhr.status === 200) {
         const response = JSON.parse(xhr.response)
-        const articles = response.articles.map(a => ({
+        const articles: Article[] = response.articles.map((a: any) => ({
           ...a,
           urlToImage: a.urlToImage || defaultImage,
           id: uniqueId(),
