@@ -26,22 +26,28 @@ export const Home: React.FC = () => {
     const uniqueId = () => String(Date.now().toString(32) + Math.random().toString(16)).replace(/\./g, "")
     let url = `https://newsapi.org/v2/top-headlines?page=${currentPage}&country=us&apiKey=5ec33b15b5654516b7daa7b59f2c8399&pageSize=6`
     url += searchValue ? `&q=${searchValue}` : ""
-    const xhr = new XMLHttpRequest()
-    xhr.open("GET", url)
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.response)
-        const articles: Article[] = response.articles.map((a: any) => ({
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok")
+        }
+        return response.json()
+      })
+      .then(data => {
+        const articles: Article[] = data.articles.map((a: any) => ({
           ...a,
           urlToImage: a.urlToImage || defaultImage,
           id: uniqueId(),
         }))
         setNewspaper(articles)
-        pageCount.current = Math.ceil(response.totalResults / 6)
-      }
-      setLoading(false)
-    }
-    xhr.send()
+        pageCount.current = Math.ceil(data.totalResults / 6)
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [searchValue, currentPage])
 
   return (
@@ -49,7 +55,7 @@ export const Home: React.FC = () => {
       <Search setSearchValue={setSearchValue} setCurrentPage={setCurrentPage} />
       <div className="content">
         {loading ? (
-          ""
+          <div>Loading...</div>
         ) : newspaper.length ? (
           newspaper.map(obj => <NewsBlock key={obj.id} {...obj} />)
         ) : (
